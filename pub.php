@@ -3,7 +3,7 @@
 
   function pubMqtt($topic,$msg){
        
-      put("https://api.netpie.io/topic/{YOUR NETPIE.IO APP ID}/$topic?retain",$msg);
+      put("https://api.netpie.io/topic/greenbot/$topic?retain",$msg);
  
   }
   function getMqttfromlineMsg($lineMsg){
@@ -36,7 +36,7 @@ function put($url,$tmsg)
      
     curl_setopt($ch, CURLOPT_POSTFIELDS, $tmsg);
  
-    curl_setopt($ch, CURLOPT_USERPWD, "{xmWFLfDAfKodr95}:{b6jcXoUmKtyO0gkHyKLsyH6bb}");
+    curl_setopt($ch, CURLOPT_USERPWD, "xmWFLfDAfKodr95:b6jcXoUmKtyO0gkHyKLsyH6bb");
      
     $response = curl_exec($ch);
      
