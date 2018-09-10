@@ -1,12 +1,13 @@
-<?php
- 
-
-  function pubMqtt($topic,$msg){
-       
-      put("https://api.netpie.io/topic/greenbot/$topic?retain",$msg);
+ <?php
+ function pubMqtt($topic,$msg){
+       $APPID= "greenbot/"; //enter your appid
+     $KEY = "xmWFLfDAfKodr95"; //enter your key
+    $SECRET = "b6jcXoUmKtyO0gkHyKLsyH6bb"; //enter your secret
+    $Topic = "$topic"; 
+      put("https://api.netpie.io/microgear/".$APPID.$Topic."?retain&auth=".$KEY.":".$SECRET,$msg);
  
   }
-  function getMqttfromlineMsg($lineMsg){
+ function getMqttfromlineMsg($Topic,$lineMsg){
  
     $pos = strpos($lineMsg, ":");
     if($pos){
@@ -15,13 +16,13 @@
       $msg = $splitMsg[1];
       pubMqtt($topic,$msg);
     }else{
-      $topic = "raw";
+      $topic = $Topic;
       $msg = $lineMsg;
       pubMqtt($topic,$msg);
     }
   }
  
-function put($url,$tmsg)
+  function put($url,$tmsg)
 {
       
     $ch = curl_init($url);
@@ -36,13 +37,15 @@ function put($url,$tmsg)
      
     curl_setopt($ch, CURLOPT_POSTFIELDS, $tmsg);
  
-    curl_setopt($ch, CURLOPT_USERPWD, "xmWFLfDAfKodr95:b6jcXoUmKtyO0gkHyKLsyH6bb");
+    //curl_setopt($ch, CURLOPT_USERPWD, "mJ7K4MfteC7p0dW:pp4gzMhCvJIqlxc66hKEvk46m");
      
     $response = curl_exec($ch);
-     
-    curl_close ($ch);
-     
+    
+      curl_close($ch);
+      echo $response . "\r\n";
     return $response;
 }
- 
+// $Topic = "NodeMCU1";
+ //$lineMsg = "CHECK";
+ //getMqttfromlineMsg($Topic,$lineMsg);
 ?>

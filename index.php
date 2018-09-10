@@ -1,25 +1,46 @@
-<?php
+<html>
+  <head>
+    <title>Monitor</title>
+    <link href='http://fonts.googleapis.com/css?family=Maven+Pro:900,700' rel='stylesheet' type='text/css'>
+    <link href='style.css' rel='stylesheet' type='text/css'>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.netpie.io/microgear.js"></script>
+  </head>
+  <body>
 
-require('../vendor/autoload.php');
+    <h1 id="temp">-</h1><br>
+    <h1 id="humid">-</h1><br>
+      
+      <script type="text/javascript">
+        const APPID     = "greenbot"
+		const APPKEY    = "xmWFLfDAfKodr95"
+		const APPSECRET = "b6jcXoUmKtyO0gkHyKLsyH6bb"
 
-$app = new Silex\Application();
-$app['debug'] = true;
 
-// Register the monolog logging service
-$app->register(new Silex\Provider\MonologServiceProvider(), array(
-  'monolog.logfile' => 'php://stderr',
-));
+		    var microgear = Microgear.create({
+		        key: APPKEY,
+		        secret: APPSECRET,
+		        alias : "myhtml"         /*  optional  */
+		    });
 
-// Register view rendering
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/views',
-));
+		    microgear.on('message',function(topic,msg) {
+            if(topic == "/greenbot/Temp"){
+              $("#Temp").html(msg);  
+            }
+		        if(topic == "/greenbot/humid"){
+              $("#humid").html(msg);  
+            }
+		    });
 
-// Our web handlers
+		    microgear.on('connected', function() {
+		        microgear.setAlias('htmlgear');
+            microgear.subscribe("/Temp");
+            microgear.subscribe("/humid");
+		        alert("connect");
+		    });
+		    microgear.connect(APPID);
+		</script>
 
-$app->get('/', function() use($app) {
-  $app['monolog']->addDebug('logging output.');
-  return $app['twig']->render('index.twig');
-});
-
-$app->run();
+      </script>
+  </body>
+</html>
